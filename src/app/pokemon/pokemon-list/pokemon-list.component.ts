@@ -2,7 +2,7 @@ import { Component, signal, computed, inject } from '@angular/core';
 import { Pokemon } from '../../pokemon.model';
 import { PokemanBorder } from '../../pokeman-border';
 import { DatePipe } from '@angular/common';
-import { Pokemonservice } from '../../pokemon.service';
+import { Pokemonservice } from '../../services/pokemon.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -37,7 +37,7 @@ export class PokemonListComponent {
 
     return 'Moyen';
   };
-  
+
   incrementLife(pokemon: Pokemon) {
     pokemon.life = pokemon.life + 1;
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { PokemonList, Pokemon } from './pokemon.model';
-import { POKEMON_LIST } from './pokemon-list.fake';
+import { PokemonList, Pokemon } from '../pokemon.model';
+import { POKEMON_LIST } from '../pokemon-list.fake';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,7 @@ export class Pokemonservice {
       'Electrik',
       'Normal',
     ];
-  
+
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Pokemonservice } from '../../pokemon.service';
+import { Pokemonservice } from '../../services/pokemon.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
