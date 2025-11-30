@@ -1,6 +1,6 @@
 import { Component, signal, computed, inject } from '@angular/core';
 import { Pokemon } from '../../pokemon.model';
-import { PokemanBorder } from '../../pokeman-border';
+import { PokemanBorder } from '../../pokeman-border.directive';
 import { DatePipe } from '@angular/common';
 import { Pokemonservice } from '../../services/pokemon.service';
 import { RouterLink } from '@angular/router';

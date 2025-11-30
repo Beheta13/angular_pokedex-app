@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Pokemonservice } from '../../services/pokemon.service';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { getPokemonColor } from '../../pokemon.model';
 
 @Component({
   selector: 'app-pokemon-edit',
@@ -17,6 +18,12 @@ export class PokemonEditComponent {
   readonly pokemon = signal(
     this.pokemonService.getPokemonById(this.pokemonId())
   ).asReadonly();
+
+  getPokemonColor(type: string): string {
+    return getPokemonColor(type);
+  }
+  readonly getchipTextColor = this.pokemonService.getChipTextColor;
+
 
   readonly form = new FormGroup({
     name: new FormControl(this.pokemon().name),
@@ -52,5 +59,26 @@ export class PokemonEditComponent {
 
   onSubmit() {
     console.log(this.form.value);
+  }
+
+
+  incrementLife() {
+    const currentLife = this.form.get('life')?.value || 0;
+    this.form.get('life')?.setValue(currentLife + 1);
+  }
+
+  decrementLife() {
+    const currentLife = this.form.get('life')?.value || 0;
+    this.form.get('life')?.setValue(currentLife - 1);
+  }
+
+  incrementDamage(){
+    const currentDamage = this.form.get('damage')?.value || 0;
+    this.form.get('damage')?.setValue(currentDamage + 1);
+  }
+
+  decrementDamage(){
+    const currentDamage = this.form.get('damage')?.value || 0;
+    this.form.get('damage')?.setValue(currentDamage - 1);
   }
 }

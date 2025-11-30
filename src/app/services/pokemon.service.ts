@@ -18,6 +18,10 @@ export class Pokemonservice {
     return pokeman;
   }
 
+  getChipTextColor(type: string): "black" | "white" {
+    return type=== 'Electrik' ? 'black' : 'white';
+  }
+
   getPokemonTypeList(): string[] {
     return [
       'Feu',
