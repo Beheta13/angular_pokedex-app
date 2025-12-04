@@ -1,6 +1,15 @@
 import { PokemonList } from './pokemon.model';
 
-
+/**
+ * Données fictives de test pour le Pokédex
+ *
+ * Cette liste contient des Pokémons pré-configurés utilisés pour le développement
+ * et les tests de l'application. En production, ces données seraient remplacées
+ * par des données provenant d'une API backend.
+ *
+ * Contient 12 Pokémons de la première génération avec leurs caractéristiques:
+ * - ID, nom, points de vie, dégâts, types, image et date de création
+ */
 export const POKEMON_LIST: PokemonList = [
   {
     id: 1,
@@ -123,7 +132,4 @@ export const POKEMON_LIST: PokemonList = [
     created: new Date(),
   },
 ];
-function Component(arg0: { selector: string; imports: never[]; templateUrl: string; styleUrls: string[]; }) {
-  throw new Error('Function not implemented.');
-}
 
