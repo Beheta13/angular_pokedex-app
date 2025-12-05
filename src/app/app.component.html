@@ -1,8 +1,11 @@
-
+<!-- Barre de navigation principale avec le titre de l'application -->
+<!-- routerLink="pokemons" : Redirige vers la liste des Pokémons au clic sur le titre -->
 <nav class="navbar bg-success mb-5 ">
     <div class="container text-white     justify-content-center">
         <h1 class="header-title" routerLink="pokemons">Pokedex</h1>
     </div>
 </nav>
 
+<!-- RouterOutlet : Zone dynamique où s'affichent les différents composants selon la route active -->
+<!-- Les composants enfants (liste, profil, édition, login, 404) s'affichent ici -->
 <router-outlet></router-outlet>

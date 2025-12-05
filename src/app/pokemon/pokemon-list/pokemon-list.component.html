@@ -1,10 +1,14 @@
+<!-- Barre de recherche pour filtrer les Pokémons par nom -->
 <div class="container mb-5">
     <div class="row">
-        <div class="col-4 offset-4">
+        <div class="col-4 offset-4 mb-3">
             <div class="card">
                 <form class="card-body">
                     <div class="form-group">
                         <label for="search" class="form-label">Rechercher un Pokemon</label>
+                        <!-- #searchfield : Variable de template pour accéder à l'élément dans le DOM -->
+                        <!-- [value] : Liaison unidirectionnelle - affiche la valeur du signal searchTerm -->
+                        <!-- (input) : Événement déclenché à chaque frappe - met à jour le signal searchTerm -->
                         <input
                             id="search"
                             type="text"
@@ -22,8 +26,11 @@
     </div>
 </div>
 
+
+<!-- Grille affichant la liste filtrée des Pokémons -->
 <div class="container">
     <div class="row">
+      <!-- @if : Syntaxe de flux de contrôle Angular 17+ - Affiche le spinner pendant le chargement -->
       @if (loading()) {
         <div class="d-flex justify-content-center">
           <div class="spinner-border text-success" role="status">
@@ -31,14 +38,18 @@
           </div>
         </div>
       }
+        <!-- @for : Boucle sur la liste filtrée des Pokémons - track pokemon.id pour les performances -->
         @for (pokemon of pokemonListFiltered(); track pokemon.id) {
             <div class="col-md-4 pokemon-card">
+                <!-- appPokemanBorder : Directive personnalisée pour l'effet de bordure au survol -->
+                <!-- [routerLink] : Navigation vers le profil détaillé au clic sur la carte -->
                 <div class="card mb-3"
                   appPokemanBorder
                   [pokemonType]="pokemon.types[0]"
                   [routerLink]="['/pokemons', pokemon.id]"
                   >
                     <div class="row g-0">
+                        <!-- Image du Pokémon -->
                         <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
                             <img
                                 class="img-fluid rounded-start"
@@ -46,10 +57,13 @@
                                 [alt]="pokemon.name"
                             />
                         </div>
+                        <!-- Informations du Pokémon -->
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">{{ pokemon.name }}</h5>
+                                <!-- {{ }} : Interpolation - affiche une valeur dynamique -->
                                 <p>Taille: {{ size(pokemon) }}</p>
+                                <!-- | date : Pipe Angular pour formater la date -->
                                 <p class ="card-text">{{ pokemon.created | date: "dd/MM/yyyy" }}</p>
                                 <p class="card-text">Point de vie: {{ pokemon.life }}</p>
                                 <p class="card-text">Dégâts: {{ pokemon.damage }}</p>
@@ -63,3 +77,14 @@
         }
     </div>
 </div>
+
+<!-- Bouton flottant "+" pour ajouter un nouveau Pokémon (position fixe en bas à droite) -->
+<div class="position-fixed bottom-0 end-0 m-3">
+      <button
+        class="btn btn-success rounded-circle btn-lg"
+        type="button"
+        [routerLink]="['/pokemons', 'add']"
+      >
+        +
+      </button>
+    </div>

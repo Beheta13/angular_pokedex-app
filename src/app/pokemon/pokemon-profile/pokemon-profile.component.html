@@ -1,19 +1,25 @@
+<!-- Template affichant le profil détaillé d'un Pokémon -->
 <div class="container mt-5">
+  <!-- @if avec 'as' : Syntaxe de flux de contrôle - Affiche la carte si pokemon existe et l'assigne à une variable locale -->
   @if (pokemon(); as pokemon) {
   <div class="card">
     <div class="row g-0">
+      <!-- Image du Pokémon -->
       <div
         class="col-md-4 d-flex align-items-center justify-content-center bg-light"
       >
+        <!-- pokemon! : Opérateur non-null assertion - indique à TypeScript que pokemon n'est jamais null ici -->
         <img
           [src]="pokemon!.picture"
           class="img-fluid rounded-start"
           [alt]="pokemon!.name"
         />
       </div>
+      <!-- Détails du Pokémon -->
       <div class="col-md-8">
         <div class="card-body">
           <h2 class="card-title">{{ pokemon!.name }}</h2>
+          <!-- Tableau des caractéristiques du Pokémon -->
           <table class="table">
             <tbody>
               <tr>
@@ -27,7 +33,10 @@
               <tr>
                 <th scope="row">Types</th>
                 <td>
+                  <!-- Boucle sur les types du Pokémon pour afficher des badges colorés -->
                   @for(type of pokemon!.types; track type) {
+                  <!-- [style.backgroundColor] : Liaison de style dynamique selon le type -->
+                  <!-- ?? '' : Opérateur de coalescence nulle - utilise '' si type est null/undefined -->
                   <span
                   class="badge rounded-pill me-1"
                   [style.backgroundColor]="getPokemonColor(type ?? '')"
@@ -40,22 +49,27 @@
               </tr>
               <tr>
                 <th scope="row">Date de création</th>
+                <!-- Pipe date pour formater la date au format français -->
                 <td>{{ pokemon!.created | date : "dd/MM/yyyy" }}</td>
               </tr>
             </tbody>
           </table>
+          <!-- Boutons d'action -->
           <div class="d-flex justify-content-between mt-4">
+            <!-- Bouton retour vers la liste -->
             <button
               class="btn btn-link text-decoration-none text-warning"
               routerLink="/pokemons"
             >
               RETOUR
             </button>
+            <!-- Bouton édition - Navigation vers le formulaire d'édition -->
             <button class="btn btn-link text-decoration-none text-warning"
              [routerLink]="['/pokemons/edit', pokemon!.id]"
             >
               ÉDITER
             </button>
+            <!-- Bouton suppression - Appelle la méthode deletePokemon() du composant -->
             <button (click)="deletePokemon()" class="btn btn-link text-decoration-none text-warning">
               SUPPRIMER
             </button>
@@ -64,13 +78,17 @@
       </div>
     </div>
   </div>
-  }  @if (loading()) {
+  }
+  <!-- Spinner affiché pendant le chargement des données -->
+  @if (loading()) {
   <div class="d-flex justify-content-center">
     <div class="spinner-border text-success" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-    } @if (error()) {
+    }
+    <!-- Page d'erreur 404 si le Pokémon n'existe pas -->
+    @if (error()) {
       <div class="container text-center mt-5">
         <div class="card">
           <div class="card-body">

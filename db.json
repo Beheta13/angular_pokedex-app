@@ -27,7 +27,7 @@
       "id": 3,
       "name": "Carapuce",
       "life": 21,
-      "damage": 4,
+      "damage": 7,
       "picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/007.png",
       "types": [
         "Eau"
@@ -135,6 +135,19 @@
         "Feu"
       ],
       "created": "2024-08-16T00:00:00Z"
+    },
+    {
+      "name": "Pokeball",
+      "picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/100.png",
+      "life": 10,
+      "damage": 1,
+      "types": [
+        "Normal",
+        "Electrik",
+        "Vol"
+      ],
+      "created": "2025-12-05T02:25:53.544Z",
+      "id": 13
     }
   ]
 }

@@ -2,7 +2,7 @@ import { Component, signal, computed, inject } from '@angular/core';
 import { Pokemon } from '../../pokemon.model';
 import { PokemanBorder } from '../../pokeman-border.directive';
 import { DatePipe } from '@angular/common';
-import { Pokemonservice } from '../../services/pokemon.service';
+import { PokemonService } from '../../services/pokemon.service';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -25,9 +25,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class PokemonListComponent {
   // Injection du service Pokémon (privé avec #)
-  readonly #pokemonService = inject(Pokemonservice);
+  readonly #pokemonService = inject(PokemonService);
 
-  // Signal contenant la liste complète des Pokémons
+  /**
+   * Signal contenant la liste complète des Pokémons récupérée depuis l'API
+   *
+   * toSignal convertit l'Observable HTTP en Signal avec une valeur initiale vide.
+   * Le tableau se remplit automatiquement dès que l'API répond.
+   */
   readonly pokemonList = toSignal(this.#pokemonService.getPokemonList(), {
     initialValue: []
   });
@@ -51,6 +56,11 @@ export class PokemonListComponent {
     );
   });
 
+  /**
+   * Signal calculé indiquant si les données sont en cours de chargement
+   *
+   * @returns true si la liste est vide (chargement en cours), false sinon
+   */
   readonly loading = computed(() => this.pokemonList().length === 0);
 
   /**

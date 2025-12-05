@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Pokemonservice } from '../../services/pokemon.service';
+import { PokemonService } from '../../services/pokemon.service';
 import { DatePipe } from '@angular/common';
 import { getPokemonColor } from '../../pokemon.model';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -29,10 +29,11 @@ export class PokemonProfileComponent {
   // Injection du service de routage pour accéder aux paramètres d'URL
   readonly #route = inject(ActivatedRoute);
 
+  // Injection du routeur pour naviguer après suppression
   readonly #router = inject(Router);
 
   // Injection du service Pokémon pour récupérer les données
-  readonly #pokemonService = inject(Pokemonservice);
+  readonly #pokemonService = inject(PokemonService);
 
   // Référence à la méthode du service pour déterminer la couleur du texte des badges
   readonly getchipTextColor = this.#pokemonService.getChipTextColor;
@@ -40,7 +41,16 @@ export class PokemonProfileComponent {
   // Récupère l'ID du Pokémon depuis l'URL (ex: /pokemons/5 -> pokemonId = 5)
   readonly #pokemonId = Number(this.#route.snapshot.paramMap.get('id'));
 
-
+  /**
+   * Signal contenant la réponse HTTP du Pokémon avec gestion d'erreur
+   *
+   * Structure: { value: Pokemon | undefined, error: any | undefined }
+   * - value contient le Pokémon si la requête réussit
+   * - error contient l'erreur si la requête échoue (404, 500, etc.)
+   *
+   * toSignal convertit l'Observable HTTP en Signal réactif
+   * catchError capture les erreurs HTTP et les transforme en objet avec error
+   */
   readonly #pokemonResponse = toSignal(
     this.#pokemonService.getPokemonById(this.#pokemonId).pipe(
       map((pokemon) => ({ value: pokemon , error: undefined })),
@@ -48,10 +58,21 @@ export class PokemonProfileComponent {
     )
   );
 
+  // Signal calculé indiquant si les données sont en cours de chargement
   readonly loading = computed(() => this.#pokemonResponse() ===undefined);
+
+  // Signal calculé contenant l'erreur éventuelle (404, erreur réseau, etc.)
   readonly error = computed(() => this.#pokemonResponse()?.error);
+
+  // Signal calculé contenant le Pokémon une fois chargé
   readonly pokemon = computed(() => this.#pokemonResponse()?.value);
 
+  /**
+   * Supprime le Pokémon actuellement affiché
+   *
+   * Envoie une requête DELETE à l'API puis redirige vers la liste
+   * des Pokémons après suppression réussie.
+   */
   deletePokemon() {
     this.#pokemonService.deletePokemon(this.#pokemonId).subscribe(() => {
       this.#router.navigate(['/pokemons']);

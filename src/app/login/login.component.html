@@ -1,0 +1,57 @@
+<!-- Formulaire de connexion à l'application -->
+<!-- Identifiants par défaut: Pikachu / Pikachu# -->
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-4 offset-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title text-center">Page de connexion</h3>
+          <!-- Affichage du message d'état (déconnecté, connexion en cours, erreur) -->
+          <p class="text-center">{{ message() }}</p>
+          <!-- (submit) : Événement déclenché lors de la soumission du formulaire -->
+          <form (submit)="onSubmit($event)">
+            <!-- Champ nom d'utilisateur -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom</label>
+              <!-- #nameField : Variable de template pour accéder à l'input -->
+              <!-- [value] : Liaison unidirectionnelle - affiche la valeur du signal -->
+              <!-- (input) : Met à jour le signal à chaque frappe -->
+              <input
+                #nameField
+                id="name"
+                type="text"
+                name="name"
+                class="form-control"
+                autocomplete="username"
+                [value]="name()"
+                (input)="name.set(nameField.value)"
+                required
+              />
+            </div>
+            <!-- Champ mot de passe -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Mot de passe</label>
+              <input
+                #passwordField
+                id="password"
+                type="password"
+                name="password"
+                class="form-control"
+                autocomplete="current-password"
+                [value]="password()"
+                (input)="password.set(passwordField.value)"
+                required
+              />
+            </div>
+            <!-- Bouton de soumission -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success">
+                Se connecter
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
