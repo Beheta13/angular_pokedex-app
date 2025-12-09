@@ -8,6 +8,19 @@ import { PokemonEditComponent } from './pokemon/pokemon-edit/pokemon-edit.compon
 import { provideHttpClient } from '@angular/common/http';
 import { AuthGuard } from './core/auth/auth.guard';
 import { PokemonAddComponent } from './pokemon/pokemon-add/pokemon-add.component';
+import { PokemonService } from './services/pokemon.service';
+import { PokemonLocalStorageService } from './services/pokemon-local-storage.service';
+import { environment } from '../environments/environment';
+import { PokemonJSONServerService } from './services/pokemon-json-server.service';
+
+
+
+
+export function pokemonServiceFactory(): PokemonService {
+  return environment.production
+    ? new PokemonLocalStorageService()
+    : new PokemonJSONServerService();
+}
 
 /**
  * Configuration du système de routage de l'application
@@ -88,5 +101,9 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(),
-  ]
+     {
+      provide: PokemonService,
+      useFactory: pokemonServiceFactory,
+    },
+  ],
 };
