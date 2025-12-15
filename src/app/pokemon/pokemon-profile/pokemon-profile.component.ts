@@ -27,19 +27,19 @@ import { catchError, map, of } from 'rxjs';
 export class PokemonProfileComponent {
 
   // Injection du service de routage pour accéder aux paramètres d'URL
-  readonly #route = inject(ActivatedRoute);
+  readonly route = inject(ActivatedRoute);
 
   // Injection du routeur pour naviguer après suppression
-  readonly #router = inject(Router);
+  readonly router = inject(Router);
 
   // Injection du service Pokémon pour récupérer les données
-  readonly #pokemonService = inject(PokemonService);
+  readonly pokemonService = inject(PokemonService);
 
   // Référence à la méthode du service pour déterminer la couleur du texte des badges
-  readonly getchipTextColor = this.#pokemonService.getChipTextColor;
+  readonly getchipTextColor = this.pokemonService.getChipTextColor;
 
   // Récupère l'ID du Pokémon depuis l'URL (ex: /pokemons/5 -> pokemonId = 5)
-  readonly #pokemonId = Number(this.#route.snapshot.paramMap.get('id'));
+  readonly pokemonId = signal(Number(this.route.snapshot.paramMap.get('id')));
 
   /**
    * Signal contenant la réponse HTTP du Pokémon avec gestion d'erreur
@@ -51,22 +51,7 @@ export class PokemonProfileComponent {
    * toSignal convertit l'Observable HTTP en Signal réactif
    * catchError capture les erreurs HTTP et les transforme en objet avec error
    */
-  readonly #pokemonResponse = toSignal(
-    this.#pokemonService.getPokemonById(this.#pokemonId).pipe(
-      map((pokemon) => ({ value: pokemon , error: undefined })),
-      catchError((error) => of({ value: undefined, error: error }))
-    )
-  );
-
-  // Signal calculé indiquant si les données sont en cours de chargement
-  readonly loading = computed(() => this.#pokemonResponse() ===undefined);
-
-  // Signal calculé contenant l'erreur éventuelle (404, erreur réseau, etc.)
-  readonly error = computed(() => this.#pokemonResponse()?.error);
-
-  // Signal calculé contenant le Pokémon une fois chargé
-  readonly pokemon = computed(() => this.#pokemonResponse()?.value);
-
+  readonly pokemonResource = this.pokemonService.getPokemonById(this.pokemonId);
   /**
    * Supprime le Pokémon actuellement affiché
    *
@@ -74,8 +59,8 @@ export class PokemonProfileComponent {
    * des Pokémons après suppression réussie.
    */
   deletePokemon() {
-    this.#pokemonService.deletePokemon(this.#pokemonId).subscribe(() => {
-      this.#router.navigate(['/pokemons']);
+    this.pokemonService.deletePokemon(this.pokemonId()).subscribe(() => {
+      this.router.navigate(['/pokemons']);
     });
   }
 

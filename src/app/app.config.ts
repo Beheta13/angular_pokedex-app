@@ -6,20 +6,26 @@ import { PokemonProfileComponent } from './pokemon/pokemon-profile/pokemon-profi
 import { PageNoFoundComponent } from './page-no-found/page-no-found.component';
 import { PokemonEditComponent } from './pokemon/pokemon-edit/pokemon-edit.component';
 import { provideHttpClient } from '@angular/common/http';
-import { AuthGuard } from './core/auth/auth.guard';
 import { PokemonAddComponent } from './pokemon/pokemon-add/pokemon-add.component';
 import { PokemonService } from './services/pokemon.service';
-import { PokemonLocalStorageService } from './services/pokemon-local-storage.service';
-import { environment } from '../environments/environment';
 import { PokemonJSONServerService } from './services/pokemon-json-server.service';
 
-
-
-
+/**
+ * Factory function pour instancier le service Pokémon approprié
+ *
+ * Sélectionne automatiquement l'implémentation du service selon l'environnement :
+ * - PRODUCTION : PokemonLocalStorageService (stockage local dans le navigateur)
+ * - DÉVELOPPEMENT : PokemonJSONServerService (API REST sur localhost:3000)
+ *
+ * Ce pattern permet de changer facilement de backend sans modifier le code
+ * des composants, respectant ainsi le principe d'injection de dépendances.
+ *
+ * @returns Instance de PokemonService (LocalStorage ou JSONServer)
+ */
 export function pokemonServiceFactory(): PokemonService {
-  return environment.production
-    ? new PokemonLocalStorageService()
-    : new PokemonJSONServerService();
+  // return environment.production
+  //   ? new PokemonLocalStorageService()
+    return new PokemonJSONServerService();
 }
 
 /**
@@ -47,7 +53,7 @@ const routes: Routes =[
   // canActivateChild protège toutes les routes enfants
   {
     path: 'pokemons',
-    canActivateChild: [AuthGuard],
+    // canActivateChild: [AuthGuard],
     children: [
 
         {

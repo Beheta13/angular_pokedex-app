@@ -27,16 +27,16 @@ import { catchError, map, of } from 'rxjs';
 })
 export class PokemonEditComponent {
    // Injection du service de routage pour récupérer l'ID du Pokémon depuis l'URL
-  readonly #route = inject(ActivatedRoute);
+  readonly route = inject(ActivatedRoute);
 
   // Injection du routeur pour rediriger après la sauvegarde
-  readonly #router = inject(Router);
+  readonly router = inject(Router);
 
   // Injection du service Pokémon pour accéder aux données et méthodes utilitaires
   readonly pokemonService = inject(PokemonService);
 
   // Signal contenant l'ID du Pokémon à éditer extrait de l'URL
-  readonly #pokemonId = signal(Number(this.#route.snapshot.paramMap.get('id')));
+  readonly pokemonId = signal(Number(this.route.snapshot.paramMap.get('id')));
 
   /**
    * Signal contenant la réponse HTTP du Pokémon avec gestion d'erreur
@@ -47,21 +47,7 @@ export class PokemonEditComponent {
    *
    * catchError capture les erreurs HTTP et les transforme en objet avec error
    */
-  readonly #pokemonResponse = toSignal(
-    this.pokemonService.getPokemonById(this.#pokemonId()).pipe(
-      map((pokemon) => ({ value: pokemon , error: undefined })),
-      catchError((error) => of({ value: undefined, error: error }))
-    )
-  );
-
-  // Signal calculé indiquant si les données sont en cours de chargement
-  readonly loading = computed(() => this.#pokemonResponse() ===undefined);
-
-  // Signal calculé contenant l'erreur éventuelle
-  readonly error = computed(() => this.#pokemonResponse()?.error);
-
-  // Signal calculé contenant le Pokémon une fois chargé
-  readonly pokemon = computed(() => this.#pokemonResponse()?.value);
+  readonly pokemonResource = this.pokemonService.getPokemonById(this.pokemonId);
 
   /**
    * Obtient la couleur hexadécimale associée à un type de Pokémon
@@ -116,7 +102,7 @@ export class PokemonEditComponent {
    */
   constructor() {
     effect(() => {
-      const pokemon = this.pokemon();
+      const pokemon = this.pokemonResource.value();
 
       if(pokemon) {
         // Remplit les champs simples du formulaire (name, life, damage)
@@ -252,7 +238,7 @@ export class PokemonEditComponent {
    */
   onSubmit() {
       const isFormValid = this.form.valid;
-      const pokemon = this.pokemon();
+      const pokemon = this.pokemonResource.value();
 
       if (isFormValid && pokemon) {
         // Construit l'objet Pokémon mis à jour avec les valeurs du formulaire
@@ -266,7 +252,7 @@ export class PokemonEditComponent {
 
         // Envoie la requête PUT et redirige vers le profil après succès
         this.pokemonService.updatePokemon(updatePokemon).subscribe(() => {
-          this.#router.navigate(['/pokemons', pokemon.id]);
+          this.router.navigate(['/pokemons', pokemon.id]);
         });
     }
   }

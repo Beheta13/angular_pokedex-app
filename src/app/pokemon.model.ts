@@ -9,7 +9,7 @@ export interface Pokemon {
   picture: string;      // URL de l'image du Pokémon
   life: number;         // Points de vie (HP) du Pokémon
   damage: number;       // Points de dégâts d'attaque
-  types: [string, string?, string?];  // Types du Pokémon (minimum 1, maximum 3)
+  types: [string] | [string, string] | [string, string, string];  // Types du Pokémon (minimum 1, maximum 3)
   created: Date;        // Date de création/ajout du Pokémon
 }
 

@@ -1,7 +1,7 @@
 <!-- Template affichant le profil détaillé d'un Pokémon -->
 <div class="container mt-5">
   <!-- @if avec 'as' : Syntaxe de flux de contrôle - Affiche la carte si pokemon existe et l'assigne à une variable locale -->
-  @if (pokemon(); as pokemon) {
+  @if (pokemonResource.value(); as pokemon) {
   <div class="card">
     <div class="row g-0">
       <!-- Image du Pokémon -->
@@ -80,7 +80,7 @@
   </div>
   }
   <!-- Spinner affiché pendant le chargement des données -->
-  @if (loading()) {
+  @if (pokemonResource.isLoading()) {
   <div class="d-flex justify-content-center">
     <div class="spinner-border text-success" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -88,7 +88,7 @@
   </div>
     }
     <!-- Page d'erreur 404 si le Pokémon n'existe pas -->
-    @if (error()) {
+    @if (pokemonResource.error()) {
       <div class="container text-center mt-5">
         <div class="card">
           <div class="card-body">

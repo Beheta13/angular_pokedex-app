@@ -1,16 +1,21 @@
+<!-- Formulaire de création d'un nouveau Pokémon -->
 <div class="container mt-5">
     <div class="card">
       <div class="row g-0">
+        <!-- Prévisualisation de l'image (mise à jour en temps réel) -->
         <div
           class="col-md-4 d-flex align-items-center justify-content-center bg-light"
         >
+          <!-- [src] : Affiche l'image en direct à partir de l'URL saisie -->
           <img
             [src]="pokemonPicture.value"
             class="img-fluid rounded-start"
             [alt]="pokemonName.value"
           />
         </div>
+        <!-- Formulaire de saisie -->
         <div class="col-md-8">
+          <!-- Formulaire réactif avec validation -->
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="card-body">
               <h2 class="card-title">Ajouter un nouveau Pokémon</h2>

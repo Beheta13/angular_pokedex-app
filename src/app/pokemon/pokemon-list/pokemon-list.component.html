@@ -17,8 +17,10 @@
                             placeholder="Rechercher un Pokemon"
                             #searchfield
                             [value]="searchTerm()"
+                            [disabled]="this.pokemonListResource.isLoading()"
                             (input)="searchTerm.set(searchfield.value)"
                         />
+                        <!-- [disabled] : Désactive le champ pendant le chargement des données -->
                     </div>
                 </form>
             </div>
@@ -26,12 +28,34 @@
     </div>
 </div>
 
+<!-- Barre de filtrage par type de Pokémon -->
+<div class= "container mb-5">
+  <div class="row">
+    <div class="col-4 offset-4">
+      <!-- Boucle sur tous les types disponibles pour créer des boutons -->
+      @for (type of typeList(); track type) {
+        <button
+        type="button"
+        class="btn btn-sm rounded-pill m-1"
+        [class.btn-primary]="typeSelected() === type"
+        (click)="filterByType(type)"
+        >
+        {{ type }}
+      </button>
+      <!-- [class.btn-primary] : Ajoute la classe si ce type est sélectionné (bouton bleu) -->
+      <!-- (click) : Toggle le filtre au clic (sélectionne/désélectionne le type) -->
+      }
+    </div>
+  </div>
+</div>
+
 
 <!-- Grille affichant la liste filtrée des Pokémons -->
 <div class="container">
     <div class="row">
       <!-- @if : Syntaxe de flux de contrôle Angular 17+ - Affiche le spinner pendant le chargement -->
-      @if (loading()) {
+      <!-- .isLoading() : Méthode de httpResource qui retourne true pendant la requête HTTP -->
+      @if (this.pokemonListResource.isLoading()) {
         <div class="d-flex justify-content-center">
           <div class="spinner-border text-success" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -46,7 +70,6 @@
                 <div class="card mb-3"
                   appPokemanBorder
                   [pokemonType]="pokemon.types[0]"
-                  [routerLink]="['/pokemons', pokemon.id]"
                   >
                     <div class="row g-0">
                         <!-- Image du Pokémon -->
@@ -65,8 +88,10 @@
                                 <p>Taille: {{ size(pokemon) }}</p>
                                 <!-- | date : Pipe Angular pour formater la date -->
                                 <p class ="card-text">{{ pokemon.created | date: "dd/MM/yyyy" }}</p>
-                                <p class="card-text">Point de vie: {{ pokemon.life }}</p>
-                                <p class="card-text">Dégâts: {{ pokemon.damage }}</p>
+                                <!-- Lien cliquable pour voir le profil détaillé du Pokémon -->
+                                <p class="card-text" [routerLink]="['/pokemons', pokemon.id]">voir ce pokemon</p>
+                                <!-- Bouton de suppression optimiste (retire de l'affichage sans appel API) -->
+                                <p class="card-text" (click)="removePokemon(pokemon)">Supprimer ce Pokémon</p>
                                 <p class="card-text">
                             </p>
                             </div>

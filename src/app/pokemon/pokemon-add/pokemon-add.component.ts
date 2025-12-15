@@ -86,7 +86,7 @@ export class PokemonAddComponent {
       life: this.pokemonLife.value,
       damage: this.pokemonDamage.value,
       // Transforme le FormArray en tableau de strings pour le type
-      types: this.pokemonTypeList.controls.map(control => control.value) as [string, string?, string?],
+      types: this.pokemonTypeList.controls.map(control => control.value) as [string] | [string, string] | [string, string, string],
       created: new Date()  // Date de création actuelle
     };
 
